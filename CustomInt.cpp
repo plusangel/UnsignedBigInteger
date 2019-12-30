@@ -25,10 +25,6 @@ CustomInt::CustomInt(const std::string &in) : bytes{new uint8_t[num_of_bytes]} {
 
 // constructor b
 CustomInt::CustomInt(unsigned int in) : bytes{new uint8_t[4]} {
-  /*bytes[3] = (in >> 24u) & 0xFFu;
-  bytes[2] = (in >> 16u) & 0xFFu;
-  bytes[1] = (in >> 8u) & 0xFFu;
-  bytes[0] = in & 0xFFu;*/
 
   unsigned char mask(0xff);
 
@@ -119,9 +115,9 @@ CustomInt &CustomInt::operator*(CustomInt &other) {
   return *this;
 }
 
-int top_bit_set(const std::bitset<32> &a) {
+template <size_t N> int top_bit_set(const std::bitset<N> &a) {
   int i;
-  for (i = 32 - 1; i >= 0; i--)
+  for (i = N - 1; i >= 0; i--)
     if (a.test(i))
       break;
   return i;
@@ -133,15 +129,40 @@ CustomInt &CustomInt::operator/(CustomInt &other) {
   std::bitset<num_of_bits> divisor = other.bytesToBitset();
   std::bitset<num_of_bits> quotient{};
 
-  int divisor_size = top_bit_set(divisor);
-  // if (divisor_size < 0) throw divide_by_zero();
+  int divisor_size = top_bit_set<num_of_bits>(divisor);
+
+  if (divisor_size < 0)
+    throw std::logic_error{"divide by zero"};
+
   int bit;
-  while ((bit = top_bit_set(dividend)) >= divisor_size) {
+  while ((bit = top_bit_set<num_of_bits>(dividend)) >= divisor_size) {
     quotient.set(bit - divisor_size);
     dividend ^= divisor << (bit - divisor_size);
   }
 
   BitsetToBytes(quotient, bytes);
+
+  return *this;
+}
+
+// % operator overload
+CustomInt &CustomInt::operator%(CustomInt &other) {
+  std::bitset<num_of_bits> dividend = bytesToBitset();
+  std::bitset<num_of_bits> divisor = other.bytesToBitset();
+  std::bitset<num_of_bits> quotient{};
+
+  int divisor_size = top_bit_set<num_of_bits>(divisor);
+
+  if (divisor_size < 0)
+    throw std::logic_error{"divide by zero"};
+
+  int bit;
+  while ((bit = top_bit_set<num_of_bits>(dividend)) >= divisor_size) {
+    quotient.set(bit - divisor_size);
+    dividend ^= divisor << (bit - divisor_size);
+  }
+
+  BitsetToBytes(dividend, bytes);
 
   return *this;
 }

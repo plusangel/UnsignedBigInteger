@@ -52,6 +52,9 @@ struct CustomInt {
   // / operator overload
   CustomInt &operator/(CustomInt &other);
 
+  // % operator overload
+  CustomInt &operator%(CustomInt &other);
+
   friend std::ostream &operator<<(std::ostream &stream,
                                   const CustomInt &customInt);
 

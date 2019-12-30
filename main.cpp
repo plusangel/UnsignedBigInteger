@@ -12,8 +12,7 @@ int main() {
 
   //std::cout << m1.twos();
 
-
-  CustomInt m3{m1/m2};
+  CustomInt m3{m1 % m2};
   std::cout << m3;
 //  try {
 //    CustomInt m3{m2 + m2};
