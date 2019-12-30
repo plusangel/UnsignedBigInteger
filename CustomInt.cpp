@@ -167,6 +167,12 @@ CustomInt &CustomInt::operator%(CustomInt &other) {
   return *this;
 }
 
+bool CustomInt::operator==(const CustomInt &other) const {
+  for (size_t i{}; i < num_of_bytes; i++) {
+    return bytes[i] == other.bytes[i];
+  }
+}
+
 [[nodiscard]] std::bitset<CustomInt::num_of_bits>
 CustomInt::bytesToBitset() const {
 
