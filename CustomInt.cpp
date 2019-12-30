@@ -78,15 +78,22 @@ CustomInt &CustomInt::operator+(const CustomInt &other) {
   std::bitset<num_of_bits> result;
 
   result = add(a, b);
-
   BitsetToBytes(result, bytes);
 
   return *this;
 }
 
 // - operator overload
-CustomInt &CustomInt::operator-(CustomInt &other) {
-  return *this + other.twos();
+CustomInt &CustomInt::operator-(const CustomInt &other) {
+
+  std::bitset<num_of_bits> a = bytesToBitset();
+  std::bitset<num_of_bits> b = other.bytesToBitset();
+  std::bitset<num_of_bits> result{};
+
+  result = subtract(a, b);
+  BitsetToBytes(result, bytes);
+
+  return *this;
 }
 
 // * operator overload
@@ -112,45 +119,30 @@ CustomInt &CustomInt::operator*(CustomInt &other) {
   return *this;
 }
 
-// the 2nd complement
-CustomInt &CustomInt::twos() {
-  std::bitset<num_of_bits> num = bytesToBitset();
-
-  size_t num_zero{};
-  for (int i{num_of_bits}; i >= 0; i--) {
-    if (num[i]) {
-      num_zero = i;
+int top_bit_set(const std::bitset<32> &a) {
+  int i;
+  for (i = 32 - 1; i >= 0; i--)
+    if (a.test(i))
       break;
-    }
+  return i;
+}
+
+// / operator overload
+CustomInt &CustomInt::operator/(CustomInt &other) {
+  std::bitset<num_of_bits> dividend = bytesToBitset();
+  std::bitset<num_of_bits> divisor = other.bytesToBitset();
+  std::bitset<num_of_bits> quotient{};
+
+  int divisor_size = top_bit_set(divisor);
+  // if (divisor_size < 0) throw divide_by_zero();
+  int bit;
+  while ((bit = top_bit_set(dividend)) >= divisor_size) {
+    quotient.set(bit - divisor_size);
+    dividend ^= divisor << (bit - divisor_size);
   }
 
-  for (size_t i{}; i <= num_zero; i++)
-    num.flip(i);
+  BitsetToBytes(quotient, bytes);
 
-  // std::cout << "1's complement: " << num << std::endl;
-
-  //  for two's complement go from right to left in
-  //  ones complement and if we get 1 make, we make
-  //  them 0 and keep going left when we get first
-  //  0, make that 1 and go out of loop
-  int i{};
-  for (; i < num_of_bits; i++) {
-    if (num[i] == 1)
-      num.reset(i);
-    else {
-      num.set(i);
-      break;
-    }
-  }
-
-  // If No break : all are 1  as in 111  or  11111;
-  // in such case, add extra 1 at beginning
-  if (i == num_of_bits)
-    throw std::runtime_error{"overflow error"};
-
-  // std::cout << "1's complement: " << num << std::endl;
-  // std::cout << "2's complement: " << num << std::endl;
-  BitsetToBytes(num, bytes);
   return *this;
 }
 
@@ -208,6 +200,34 @@ CustomInt::add(const std::bitset<num_of_bits> &a,
 
   // if overflow, then add a leading 1
   if (carry)
+    // result = '1' + result;
+    throw std::runtime_error{"overflow error"};
+
+  return result;
+}
+
+std::bitset<CustomInt::num_of_bits>
+CustomInt::subtract(const std::bitset<num_of_bits> &a,
+                    const std::bitset<num_of_bits> &b) {
+
+  std::bitset<num_of_bits> result;
+
+  bool borrow{}; // Initialize borrow
+
+  // Add all bits one by one
+  for (size_t i{}; i < num_of_bits; i++) {
+
+    // boolean expression for sum of 3 bits
+    bool dif = a[i] ^ b[i] ^ borrow;
+
+    result[i] = dif;
+
+    // boolean expression for 3-bit addition
+    borrow = (!a[i] & borrow) | (!a[i] & b[i]) | (b[i] & borrow);
+  }
+
+  // if overflow, then add a leading 1
+  if (borrow)
     // result = '1' + result;
     throw std::runtime_error{"overflow error"};
 

@@ -44,10 +44,13 @@ struct CustomInt {
   CustomInt &operator+(const CustomInt &other);
 
   // - operator overload
-  CustomInt &operator-(CustomInt &other);
+  CustomInt &operator-(const CustomInt &other);
 
   // * operator overload
   CustomInt &operator*(CustomInt &other);
+
+  // / operator overload
+  CustomInt &operator/(CustomInt &other);
 
   friend std::ostream &operator<<(std::ostream &stream,
                                   const CustomInt &customInt);
@@ -62,12 +65,12 @@ private:
   static void BitsetToBytes(std::bitset<num_of_bits> bits,
                             uint8_t bytes[num_of_bytes]);
 
-  // the 2nd complement
-  CustomInt &twos();
-
   // add to bitsets
   static std::bitset<CustomInt::num_of_bits>
   add(const std::bitset<num_of_bits> &a, const std::bitset<num_of_bits> &b);
-};
 
+  static std::bitset<CustomInt::num_of_bits>
+  subtract(const std::bitset<num_of_bits> &a,
+           const std::bitset<num_of_bits> &b);
+};
 #endif // CUSTOMINT_H

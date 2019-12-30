@@ -23,18 +23,14 @@ We implemented operator overloads for operator+ and operator and performed runti
 
     More [explanation](https://www.geeksforgeeks.org/add-two-bit-strings/)
     
-- **Subtraction** for binary numbers is straightforward. Given two numbers a and b, we can subtract b from a 
-by using 2’s Complement method, just because negative numbers represented as 2’s Complement of positive ones.
-
-    So the problem moves to calculate the 2nd complement. First, we need to calculate 1’s complement of a binary number 
-which is another binary number obtained by toggling all bits in it, i.e., transforming the 0 bit to 1 and the 1 bit to 0.
-
-    Then, the 2’s complement of a binary number is 1 added to the 1’s complement of the binary number.
-We traverse the one’s complement starting from LSB (least significant bit), and look for 0. 
-We flip all 1’s (change to 0) until we find a 0. Finally, we flip the found 0. 
-
-    More explanation [here](https://www.geeksforgeeks.org/subtraction-of-two-numbers-using-2s-complement/) 
-    and [here](https://www.geeksforgeeks.org/1s-2s-complement-binary-number/).
+- **Subtraction** implemented using the full subtractor algorithm. In short it looks like:
+    
+    - Perform bit addition
+        - Boolean expression for adding 3 bits a, b, borrow
+        - Difference = a XOR b XOR borrow
+        - Borrow = (!a AND borrow) OR ( !a AND b ) OR ( b AND borrow )
+    
+    More [explanation](https://en.wikipedia.org/wiki/Subtractor)
 
 - **Multiplication** implemented using the Russian peasant algorithm. 
 The idea is to double the first number and halve the second number repeatedly till the second number doesn’t become 1. 
@@ -49,10 +45,15 @@ Let the two given numbers be 'a' and 'b'
     
     More [explanation](https://www.geeksforgeeks.org/russian-peasant-multiply-two-numbers-using-bitwise-operators/) 
 
+- **Division** is a tricky operation. It was implemented by shifting the divisor up until its top bit matches that of dividend, 
+then xor and shift back down, recording each position where you need an xor as a bit of the quotient.
+
+    More [explanation](https://stackoverflow.com/questions/31090578/how-can-i-divide-bitsets) 
+
 ## todo
 - [ ] Make sure that your operator overloads work for other integer types as well 
 - [ ] Implement an operator int type conversion
 - [ ] Perform a runtime check if narrowing would occur
-- [ ] Implement operator/ and operator%
+- [ ] Implement and operator%
 - [ ] Complete documentation
 - [ ] Add unit tests
