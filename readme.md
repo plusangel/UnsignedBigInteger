@@ -54,7 +54,6 @@ then xor and shift back down, recording each position where you need an xor as a
 
 ## todo
 - [ ] Make sure that your operator overloads work for other integer types as well 
-- [ ] Implement an operator int type conversion
 - [ ] Perform a runtime check if narrowing would occur
 - [ ] Complete documentation
 

@@ -271,3 +271,10 @@ std::ostream &operator<<(std::ostream &stream, const CustomInt &customInt) {
 
   return stream;
 }
+
+CustomInt::operator int() const {
+
+  int i = bytes[0] | ((int)bytes[1] << CHAR_BIT) |
+          ((int)bytes[2] << 2 * CHAR_BIT) | ((int)bytes[3] << 3 * CHAR_BIT);
+  return i;
+}

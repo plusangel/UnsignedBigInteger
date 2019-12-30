@@ -13,13 +13,8 @@ int main() {
   // std::cout << m1.twos();
 
   CustomInt m3{"0:0:0:f"};
-  std::cout << m3;
 
-  if ((m1 + m2) == m3)
-    std::cout << "Pass" << std::endl;
-
-  if (m1 == m2)
-    std::cout << "Pass" << std::endl;
+  std::cout << "Test: " << std::dec << static_cast<int>(m3);
 
   //  try {
   //    CustomInt m3{m2 + m2};

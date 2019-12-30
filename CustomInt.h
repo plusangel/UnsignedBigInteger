@@ -58,6 +58,8 @@ struct CustomInt {
   // == operator overload
   bool operator==(const CustomInt &other) const;
 
+  explicit operator int() const;
+
   friend std::ostream &operator<<(std::ostream &stream,
                                   const CustomInt &customInt);
 
