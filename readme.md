@@ -57,3 +57,6 @@ then xor and shift back down, recording each position where you need an xor as a
 - [ ] Implement an operator int type conversion
 - [ ] Perform a runtime check if narrowing would occur
 - [ ] Complete documentation
+
+## maintainer
+Angelos Plastropoulos
