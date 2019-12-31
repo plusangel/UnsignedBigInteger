@@ -272,9 +272,13 @@ std::ostream &operator<<(std::ostream &stream, const CustomInt &customInt) {
   return stream;
 }
 
-CustomInt::operator int() const {
+CustomInt::operator uint16_t() const {
 
-  int i = bytes[0] | ((int)bytes[1] << CHAR_BIT) |
-          ((int)bytes[2] << 2 * CHAR_BIT) | ((int)bytes[3] << 3 * CHAR_BIT);
-  return i;
+  int num{};
+  for (size_t i{}; i < sizeof(uint16_t); i++)
+    num |= (bytes[i] << i * CHAR_BIT);
+
+  if (bytes[2] != 0)
+    throw std::logic_error{"narrowing error"};
+  return num;
 }

@@ -12,9 +12,9 @@ int main() {
 
   // std::cout << m1.twos();
 
-  CustomInt m3{"0:0:0:f"};
+  CustomInt m3{"0:1:0:0"};
 
-  std::cout << "Test: " << std::dec << static_cast<int>(m3);
+  std::cout << "Test: " << std::dec << static_cast<uint16_t>(m3);
 
   //  try {
   //    CustomInt m3{m2 + m2};

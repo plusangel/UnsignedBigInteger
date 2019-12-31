@@ -56,3 +56,13 @@ TEST(modulo, test_operators) {
 
   EXPECT_EQ((m1 % m2) == res, true);
 }
+
+TEST(narrowing, test_casting) {
+  CustomInt m1{"0:1:0:0"};
+
+  try {
+    auto i = static_cast<uint16_t>(m1);
+  } catch (const std::exception &e) {
+    EXPECT_EQ(e.what(), std::string("narrowing error"));
+  }
+}

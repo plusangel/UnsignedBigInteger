@@ -1,8 +1,8 @@
-# Custom integer
+# Custom unsigned integer
 
 Reinventing the wheel? Yes, when you do it for learning is OK!
 
-We designed our class that can handle integer numbers. 
+We designed our class that can handle unsigned integer numbers. 
 We used a byte array as the internal representation (uint8_t[]). 
 We implemented operator overloads for operator+ and operator and performed runtime checks for overflow.
 
@@ -52,10 +52,6 @@ then xor and shift back down, recording each position where you need an xor as a
 
 - **Module** is actually division where we return the remainder (the dividend at the end)
 
-## todo
-- [ ] Make sure that your operator overloads work for other integer types as well 
-- [ ] Perform a runtime check if narrowing would occur
-- [ ] Complete documentation
 
 ## maintainer
 Angelos Plastropoulos
